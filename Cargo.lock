@@ -651,6 +651,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "hs3003"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "839e89662cf0f500a751e5a5466f8227fc6e2f1bf2dcc903ac8c11269d6e93ac"
+dependencies = [
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+]
+
+[[package]]
 name = "ident_case"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1050,6 +1060,7 @@ dependencies = [
  "embassy-executor",
  "embassy-rp",
  "embassy-time",
+ "hs3003",
  "panic-probe",
 ]
 
