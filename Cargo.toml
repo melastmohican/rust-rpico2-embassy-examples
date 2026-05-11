@@ -1,0 +1,31 @@
+[package]
+name = "rust-rpico2-embassy-examples"
+version = "0.2.0"
+edition = "2024"
+
+[dependencies]
+# Cortex-M 
+cortex-m = "0.7.7"
+cortex-m-rt = "0.7.5"
+
+# Panic Handler
+panic-probe = { version = "1.0.0", features = ["print-defmt"] }
+
+# Embassy
+embassy-executor = { version = "0.9", features = [
+  "arch-cortex-m",
+  "executor-thread",
+  "defmt",
+] }
+embassy-time = { version = "0.5.0" }
+embassy-rp = { version = "0.9.0", features = [
+  "time-driver",
+  "critical-section-impl",
+  "rp235xa",
+  "binary-info",
+  "defmt",
+] }
+
+# Defmt Logging
+defmt = "1.0.1"
+defmt-rtt = "1.1.0"

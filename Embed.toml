@@ -1,0 +1,10 @@
+[default.general]
+chip = "RP2350"
+
+[default.rtt]
+# Whether or not an RTTUI should be opened after flashing.
+enabled = true
+
+[default.gdb]
+# Whether or not a GDB server should be opened after flashing.
+enabled = false
