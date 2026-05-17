@@ -31,4 +31,6 @@ defmt = "1.0.1"
 defmt-rtt = "1.1.0"
 
 [dev-dependencies]
+adxl345-eh-driver = "0.2.2"
 hs3003 = { version = "0.2.0", features = ["async"] }
+libm = "0.2.16"

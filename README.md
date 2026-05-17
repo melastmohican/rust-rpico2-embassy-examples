@@ -61,3 +61,27 @@ The Renesas HS3003 is a high-performance temperature and humidity sensor:
 - Humidity range: 0% to 100% RH (±1.5% accuracy)
 - 14-bit resolution for both measurements
 - Ultra-low power consumption
+
+#### adxl345_i2c
+
+Reads accelerometer data from an ADXL345 sensor over I2C0 using Embassy.
+
+```bash
+cargo run --example adxl345_i2c
+```
+
+**Wiring:**
+
+```
+     ADXL345 -> RPi Pico 2
+----------    --------------
+GND (black) -> GND
+VCC (red)   -> 3.3V
+SCL (yellow)-> GPIO5 (Pin 7) (I2C0 SCL)
+SDA (blue)  -> GPIO4 (Pin 6) (I2C0 SDA)
+```
+
+**About ADXL345:**
+
+The ADXL345 is a small, thin, low power, 3-axis accelerometer with high resolution (13-bit) measurement at up to ±16 g. Digital output data is formatted as 16-bit twos complement and is accessible through either an SPI (3- or 4-wire) or I2C digital interface.
+
