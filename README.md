@@ -85,3 +85,40 @@ SDA (blue)  -> GPIO4 (Pin 6) (I2C0 SDA)
 
 The ADXL345 is a small, thin, low power, 3-axis accelerometer with high resolution (13-bit) measurement at up to ±16 g. Digital output data is formatted as 16-bit twos complement and is accessible through either an SPI (3- or 4-wire) or I2C digital interface.
 
+### SPI Display Examples
+
+#### zermatt
+
+Displays a 320x240 image of Zermatt on the Adafruit 2.2" TFT LCD display in landscape mode.
+
+```bash
+cargo run --example zermatt
+```
+
+**Wiring (Eye-SPI Breakout):**
+
+```
+     Raspberry Pi Pico 2              Eye-SPI Breakout
+   +-----------------------+      +---------------------------+
+   |                       |      |                           |
+   |  3V3 (Pin 36) --------+------+-> VIN   (Red Wire)        |
+   |  GND (Pin 38) --------+------+-> GND   (Black Wire)      |
+   |  GPIO18 (Pin 24) -----+------+-> SCK   (Blue Wire)       |
+   |  GPIO19 (Pin 25) -----+------+-> MOSI  (Green Wire)      |
+   |  GPIO16 (Pin 21) -----+------+-> MISO  (Yellow Wire)     |
+   |  GPIO20 (Pin 26) -----+------+-> DC    (White Wire)      |
+   |  GPIO21 (Pin 27) -----+------+-> RST   (Orange Wire)     |
+   |  GPIO17 (Pin 22) -----+------+-> TCS   (Blue Wire)       |
+   |                       |      |                           |
+   +-----------------------+      +---------------------------+
+```
+
+#### zermatt_snow
+
+Displays a 320x240 image of Zermatt on the Adafruit 2.2" TFT LCD display with animated falling snow, utilizing a physics engine and the Embassy async framework to draw to an off-screen `lcd-async` framebuffer and dispatch via DMA without blocking the CPU.
+
+```bash
+cargo run --example zermatt_snow
+```
+
+Wiring is identical to the `zermatt` example.
