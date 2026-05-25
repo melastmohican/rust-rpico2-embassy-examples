@@ -39,3 +39,16 @@ tinybmp = "0.7.0"
 embedded-graphics = "0.8.2"
 embedded-hal-bus = { version = "0.3.0", features = ["async"] }
 embedded-hal-async = "1.0.0"
+onewire = { version = "0.4.0", features = ["defmt", "defmt-debug2format"] }
+embedded-hal = "1.0.0"
+
+[profile.dev]
+opt-level = 2
+debug = true
+
+[profile.release]
+opt-level = 3
+lto = true
+debug = false
+
+

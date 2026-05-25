@@ -122,3 +122,53 @@ cargo run --example zermatt_snow
 ```
 
 Wiring is identical to the `zermatt` example.
+
+### 1-Wire Examples
+
+#### ds18b20
+
+Reads temperature from a DS18B20 waterproof temperature sensor probe over a 1-Wire bus using Embassy. It utilizes a custom, cycle-accurate `PreciseDelay` implementation to achieve jitter-free sub-microsecond timing required by the 1-Wire protocol on the RP2350's Cortex-M33 core.
+
+```bash
+cargo run --example ds18b20
+```
+
+**Wiring Schematic:**
+
+```text
+                              Raspberry Pi Pico 2
+                           +-----------------------+
+                           |                       |
+                           | [ ] 1      40 [ ] USB |
+                           | [ ] 2      39 [ ]     |
+                           | [ ] 3      38 [G]ND --+-------+ (black)
+                           | [ ] 4      37 [ ]     |       |
+                           | [ ] 5      36 [3]V3 --+---+   |
+                           |  ...        ...       |   |   |
+                           | [ ] 20     21 [ ] ----+---+---|---+ (white, GPIO16)
+                           +-----------------------+   |   |   |
+                                                       |   |   |
+                                                       |   |   |
+                   +-----------------------------+     |   |   |
+                   |     DS18B20 Sensor / Probe  |     |   |   |
+                   |      (Bottom/Flat Side)     |     |   |   |
+                   |                             |     |   |   |
+                   |     [GND]   [DAT]   [VCC]   |     |   |   |
+                   +-------|-------|-------|-----+     |   |   |
+                           |       |       |           |   |   |
+                           |       +-------+--[5K1]----+   | (Pull-Up Resistor
+                           |       |       |   Resistor    |  between DAT & VCC)
+                           |       |       +---------------+ (red)
+                           +-------|-----------------------+ (black)
+                                   |
+                                   +--------------------------- (white)
+```
+
+**Breadboard Layout:**
+
+![DS18B20 Breadboard Wiring Layout](pico-DS18B20_bb.png)
+
+**About DS18B20:**
+
+The DS18B20 is a 1-Wire digital thermometer that provides 9-bit to 12-bit Celsius temperature measurements. It communicates over a 1-Wire bus, requiring only one data line (and ground) to interface with the microcontroller. It has a temperature range of -55°C to +125°C with ±0.5°C accuracy from -10°C to +85°C.
+
