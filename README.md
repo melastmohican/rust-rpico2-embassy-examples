@@ -172,3 +172,36 @@ cargo run --example ds18b20
 
 The DS18B20 is a 1-Wire digital thermometer that provides 9-bit to 12-bit Celsius temperature measurements. It communicates over a 1-Wire bus, requiring only one data line (and ground) to interface with the microcontroller. It has a temperature range of -55°C to +125°C with ±0.5°C accuracy from -10°C to +85°C.
 
+#### dht11
+
+Reads temperature and humidity from a DHT11 sensor using the Embassy async framework. It utilizes the async API of the `dht-sensor` crate combined with our cycle-accurate `PreciseDelay` implementation.
+
+```bash
+cargo run --example dht11 --release
+```
+
+Note: Due to timing sensitivity of the DHT11 protocol during the bit-read phase, you must run this example in **release** mode.
+
+**Wiring Schematic:**
+
+```text
+                     Raspberry Pi Pico 2             DHT11 Module
+                   +---------------------+      +---------------------+
+                   |                     |      |                     |
+                   | GND (Pin 38) -------+----->| GND                 |
+                   | 3V3 (Pin 36) -------+----->| VCC                 |
+                   | GPIO16 (Pin 21) ----+----->| DAT (Data)          |
+                   |                     |      |                     |
+                   +---------------------+      +---------------------+
+```
+
+> [!IMPORTANT]
+> **Pull-up Resistor:**
+> - **If using a DHT11 module board:** It likely already has a built-in pull-up resistor. No extra component is needed.
+> - **If using a bare 4-pin DHT11 sensor:** You must add an external 4.7kΩ to 10kΩ pull-up resistor between the DAT (Data) and VCC lines.
+
+**About DHT11:**
+
+The DHT11 is a basic, ultra low-cost digital temperature and humidity sensor. It uses a capacitive humidity sensor and a thermistor to measure the surrounding air, and spits out a digital signal on the data pin (no analog input pins needed). It has a temperature range of 0°C to 50°C (±2°C accuracy) and humidity range of 20% to 90% RH (±5% accuracy).
+
+
