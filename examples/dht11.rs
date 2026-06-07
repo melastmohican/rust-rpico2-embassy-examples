@@ -36,6 +36,12 @@
 #![no_std]
 #![no_main]
 
+extern crate alloc;
+use embedded_alloc::LlffHeap as Heap;
+
+#[global_allocator]
+static HEAP: Heap = Heap::empty();
+
 use defmt::*;
 use defmt_rtt as _;
 use panic_probe as _;

@@ -36,6 +36,12 @@
 #![no_std]
 #![no_main]
 
+extern crate alloc;
+use embedded_alloc::LlffHeap as Heap;
+
+#[global_allocator]
+static HEAP: Heap = Heap::empty();
+
 use defmt_rtt as _;
 use panic_probe as _;
 
@@ -61,7 +67,12 @@ use lcd_async::{
 };
 use tinybmp::Bmp;
 
+use embassy_rp::bind_interrupts;
 use hal::block::ImageDef;
+
+bind_interrupts!(struct Irqs {
+    DMA_IRQ_0 => embassy_rp::dma::InterruptHandler<embassy_rp::peripherals::DMA_CH0>, embassy_rp::dma::InterruptHandler<embassy_rp::peripherals::DMA_CH1>;
+});
 
 /// Tell the Boot ROM about our application
 #[unsafe(link_section = ".start_block")]
@@ -91,7 +102,7 @@ async fn main(_spawner: Spawner) {
         p.SPI0, p.PIN_18, // clk
         p.PIN_19, // mosi
         p.PIN_16, // miso
-        p.DMA_CH0, p.DMA_CH1, config,
+        p.DMA_CH0, p.DMA_CH1, Irqs, config,
     );
 
     info!("SPI configured at 40 MHz");

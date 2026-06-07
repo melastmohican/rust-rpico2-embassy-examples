@@ -26,6 +26,12 @@
 #![no_std]
 #![no_main]
 
+extern crate alloc;
+use embedded_alloc::LlffHeap as Heap;
+
+#[global_allocator]
+static HEAP: Heap = Heap::empty();
+
 use adxl345_eh_driver::{Driver as Adxl345, GRange, OutputDataRate};
 use defmt::*;
 use defmt_rtt as _;

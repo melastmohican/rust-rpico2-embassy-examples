@@ -204,4 +204,60 @@ Note: Due to timing sensitivity of the DHT11 protocol during the bit-read phase,
 
 The DHT11 is a basic, ultra low-cost digital temperature and humidity sensor. It uses a capacitive humidity sensor and a thermistor to measure the surrounding air, and spits out a digital signal on the data pin (no analog input pins needed). It has a temperature range of 0°C to 50°C (±2°C accuracy) and humidity range of 20% to 90% RH (±5% accuracy).
 
+### Wi-Fi & Matter Examples
 
+#### matter_wifi_light
+
+Implements a Matter-compatible Wi-Fi light bulb using the rs-matter stack. It uses BLE for commissioning and Wi-Fi for network connectivity, allowing you to add the Pico 2 W directly into Apple Home, Google Home, or Home Assistant! When toggled from your smart home app, it turns an external LED on and off.
+
+```bash
+cargo run --example matter_wifi_light --release
+```
+
+**Provisioning in Home Assistant:**
+
+1. Run the example on your Pico 2 W. It will begin advertising over Bluetooth.
+2. Open the Home Assistant companion app on your smartphone.
+3. Go to **Settings** -> **Devices & Services** -> **Add Integration** -> **Add Matter device**.
+4. When prompted for a setup code, enter the default `3497-0112-332` (or scan the QR code link printed in the terminal logs).
+5. Home Assistant will connect to the Pico 2 W over BLE, ask for your Wi-Fi credentials, and securely transmit them to the device.
+   
+   <img src="HAApp.jpg" width="300" alt="Home Assistant Provisioning">
+
+6. The Pico 2 W will connect to your Wi-Fi network and immediately appear as a standard light bulb. You can use the Home Assistant interface to toggle the light on and off!
+
+   <img src="HAToggle.png" width="300" alt="Home Assistant Toggle">
+
+7. The external LED wired to your Pico 2 W will instantly mirror the state!
+
+   ![Matter Wi-Fi Light Circuit](matter_wifi_light.jpg)
+
+**Wiring Schematic:**
+
+```text
+           Raspberry Pi Pico 2 W                   External Components
+         +------------------------+
+         |                        |
+         |         GP15 (Pin 20)  |---------[ 220-330 Ohm Resistor ]-----+
+         |                        |                                      |
+         |         GND (Pin 18)   |------------------[ LED - ] <---+     |
+         |                        |                                |     |
+         +------------------------+                     (Cathode / |     |
+                                                         Short Leg) |     |
+                                                                   |     |
+                                                        [ LED + ] -+-----+
+                                                        (Anode /
+                                                         Long Leg)
+```
+
+### Basic GPIO Examples
+
+#### blinky
+
+Blinks an external LED connected to GPIO15. This is useful for boards like the Raspberry Pi Pico 2 W, where the onboard LED is connected to the wireless chip rather than a standard microcontroller GPIO.
+
+```bash
+cargo run --example blinky
+```
+
+**Wiring:** Same wiring as the `matter_wifi_light` example.

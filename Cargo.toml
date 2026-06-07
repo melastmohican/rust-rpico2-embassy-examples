@@ -12,23 +12,31 @@ cortex-m-rt = "0.7.5"
 panic-probe = { version = "1.0.0", features = ["print-defmt"] }
 
 # Embassy
-embassy-executor = { version = "0.9", features = [
-  "arch-cortex-m",
-  "executor-thread",
-  "defmt",
-] }
-embassy-time = { version = "0.5.0" }
-embassy-rp = { version = "0.9.0", features = [
-  "time-driver",
-  "critical-section-impl",
-  "rp235xa",
-  "binary-info",
-  "defmt",
-] }
+embassy-executor = { version = "0.10", features = ["platform-cortex-m", "executor-thread", "defmt"] }
+embassy-time = { version = "0.5"}
+embassy-rp = { version = "0.10", features = ["defmt", "time-driver", "critical-section-impl", "binary-info", "rp235xa"] }
 
 # Defmt Logging
 defmt = "1.0.1"
 defmt-rtt = "1.1.0"
+
+# Matter
+rs-matter-embassy = { git = "https://github.com/melastmohican/rs-matter-embassy.git", branch = "fix/rp2350-support", default-features = false, features = [
+  "rp",
+  "embassy-net",
+  "defmt",
+  "rustcrypto",
+] }
+embassy-futures = "0.1.2"
+embassy-sync = { version = "0.6.0", features = ["defmt"] }
+embedded-alloc = "0.6.0"
+static_cell = "2.1.0"
+portable-atomic = { version = "1.5.0", features = ["critical-section"] }
+cyw43 = { version = "0.7", features = ["firmware-logs", "defmt", "bluetooth"] }
+cyw43-pio = "0.10.0"
+bt-hci = { version = "0.8", default-features = false, features = ["defmt"] }
+rtt-target = { version = "0.6.0", features = ["defmt"] }
+panic-rtt-target = "0.2.0"
 
 [dev-dependencies]
 adxl345-eh-driver = "0.2.2"
@@ -52,4 +60,7 @@ opt-level = 3
 lto = true
 debug = false
 
-
+[patch.crates-io]
+rs-matter = { git = "https://github.com/sysgrok/rs-matter", branch = "next" }
+rs-matter-stack = { git = "https://github.com/sysgrok/rs-matter-stack.git", branch = "next" }
+openthread = { git = "https://github.com/sysgrok/openthread.git", branch = "next" }

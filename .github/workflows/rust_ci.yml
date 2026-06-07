@@ -1,0 +1,87 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**/README.md"
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust-fmt:
+    name: Rust Fmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt
+      - name: Enable caching
+        uses: Swatinem/rust-cache@v2
+      - name: Run fmt
+        run: cargo fmt --all -- --check
+
+  check-examples:
+    name: Check Examples
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          target: thumbv8m.main-none-eabihf
+          toolchain: stable
+          components: rust-src
+      - name: Enable caching
+        uses: Swatinem/rust-cache@v2
+      - name: Download firmware
+        run: chmod +x download_firmware.sh && ./download_firmware.sh
+      - name: Run check
+        run: cargo check --examples
+
+  clippy-examples:
+    name: Clippy Examples
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          target: thumbv8m.main-none-eabihf
+          toolchain: stable
+          components: clippy
+      - name: Enable caching
+        uses: Swatinem/rust-cache@v2
+      - name: Download firmware
+        run: chmod +x download_firmware.sh && ./download_firmware.sh
+      - name: Run clippy
+        run: cargo clippy --examples -- -D warnings
+
+  build-release:
+    name: Build Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          target: thumbv8m.main-none-eabihf
+          toolchain: stable
+          components: rust-src
+      - name: Enable caching
+        uses: Swatinem/rust-cache@v2
+      - name: Download firmware
+        run: chmod +x download_firmware.sh && ./download_firmware.sh
+      - name: Run release build
+        run: cargo build --release && cargo build --release --examples

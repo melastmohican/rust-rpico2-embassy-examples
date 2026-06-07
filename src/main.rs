@@ -10,6 +10,9 @@ use embassy_time::Timer;
 
 //Panic Handler
 use panic_probe as _;
+
+#[global_allocator]
+static HEAP: embedded_alloc::LlffHeap = embedded_alloc::LlffHeap::empty();
 // Defmt Logging
 use defmt_rtt as _;
 
