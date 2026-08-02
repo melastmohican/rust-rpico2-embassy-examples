@@ -1678,6 +1678,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "display-driver-gc9a01"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3fb4737b16885b73e3b4a829116bfbb09e1b60a052d886a20187045088dee7a"
+dependencies = [
+ "delegate",
+ "display-driver",
+ "display-driver-mipidcs",
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+]
+
+[[package]]
 name = "display-driver-mipidcs"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6644,6 +6657,7 @@ dependencies = [
  "defmt-rtt",
  "dht-sensor",
  "display-driver",
+ "display-driver-gc9a01",
  "display-driver-spi",
  "display-driver-st7735",
  "display-interface-spi",

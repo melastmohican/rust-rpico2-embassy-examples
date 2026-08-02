@@ -189,6 +189,51 @@ Runs the **[Slint UI framework](https://slint.dev/)** in `no_std` mode using its
 cargo run --example st7735_slint
 ```
 
+#### GC9A01 240x240 Round LCD Display Examples
+
+The workspace includes examples for 240x240 GC9A01 round LCD displays built with both the **`display-driver`** async framework (`gc9a01_dd_*`) and the **`mipidsi`** driver crate (`gc9a01_mipi_*`).
+
+**Common Wiring for GC9A01 240x240 Round LCD:**
+
+```text
+     Raspberry Pi Pico 2           GC9A01 240x240 Round LCD
+   +-----------------------+      +---------------------------+
+   |                       |      |                           |
+   |  3V3 (Pin 36) --------+------+-> VCC                     |
+   |  GND (Pin 38) --------+------+-> GND                     |
+   |  GPIO17 (Pin 22) -----+------+-> CS                      |
+   |  GPIO21 (Pin 27) -----+------+-> RST                     |
+   |  GPIO20 (Pin 26) -----+------+-> DC                      |
+   |  GPIO19 (Pin 25) -----+------+-> SDA(MOSI)               |
+   |  GPIO18 (Pin 24) -----+------+-> SCL(SCK)                |
+   |                       |      |                           |
+   +-----------------------+      +---------------------------+
+```
+
+##### gc9a01_dd_ferris
+
+Draws the Ferris mascot and Rust logo BMP images on the round 240x240 GC9A01 display using the async `display-driver` crate stack (`display-driver`, `display-driver-spi`, `display-driver-gc9a01`).
+
+```bash
+cargo run --example gc9a01_dd_ferris
+```
+
+##### gc9a01_dd_concentric
+
+Renders a 4x4 Bayer dithered concentric radial gradient (golden-yellow to purple) with a shadow text overlay on the 240x240 GC9A01 display using `display-driver`.
+
+```bash
+cargo run --example gc9a01_dd_concentric
+```
+
+##### gc9a01_mipi_ferris
+
+Draws the Ferris mascot and Rust logo BMP images on the 240x240 GC9A01 display using `mipidsi` and `display-interface-spi`.
+
+```bash
+cargo run --example gc9a01_mipi_ferris
+```
+
 ### 1-Wire Examples
 
 #### ds18b20
