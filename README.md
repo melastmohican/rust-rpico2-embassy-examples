@@ -177,6 +177,18 @@ Draws text header banners, a separator line, colored geometric shapes, and botto
 cargo run --example st7735_mipi_text
 ```
 
+##### st7735_slint
+
+Runs the **[Slint UI framework](https://slint.dev/)** in `no_std` mode using its built-in software renderer, rendering an interactive animated Slint component (custom colors, typography, properties, and layout) flushed via `display-driver`.
+
+- **Slint Website:** <https://slint.dev/>
+- **Slint Documentation:** <https://slint.dev/docs>
+- **Slint Software Renderer Docs:** <https://slint.dev/docs/rust/slint/platform/software_renderer/index.html>
+
+```bash
+cargo run --example st7735_slint
+```
+
 ### 1-Wire Examples
 
 #### ds18b20

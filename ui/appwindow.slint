@@ -1,0 +1,24 @@
+export component AppWindow inherits Window {
+    width: 160px;
+    height: 80px;
+    background: #1a1a2e;
+
+    in-out property <int> counter: 0;
+
+    VerticalLayout {
+        alignment: center;
+        spacing: 4px;
+        Text {
+            text: "Slint UI on RP2350";
+            color: #e94560;
+            font-size: 11px;
+            horizontal-alignment: center;
+        }
+        Text {
+            text: "Count: " + root.counter;
+            color: #ffffff;
+            font-size: 12px;
+            horizontal-alignment: center;
+        }
+    }
+}

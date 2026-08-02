@@ -24,4 +24,9 @@ fn main() {
     println!("cargo:rerun-if-changed=rp235x_riscv.x");
 
     println!("cargo:rerun-if-changed=build.rs");
+
+    println!("cargo:rerun-if-changed=ui/appwindow.slint");
+    let config = slint_build::CompilerConfiguration::new()
+        .embed_resources(slint_build::EmbedResourcesKind::EmbedForSoftwareRenderer);
+    slint_build::compile_with_config("ui/appwindow.slint", config).unwrap();
 }
