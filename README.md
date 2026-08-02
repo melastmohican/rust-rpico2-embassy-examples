@@ -210,6 +210,10 @@ The workspace includes examples for 240x240 GC9A01 round LCD displays built with
    +-----------------------+      +---------------------------+
 ```
 
+**Breadboard Layout:**
+
+![GC9A01 Breadboard Wiring Layout](rpico2_gc9a01_bb.png)
+
 ##### gc9a01_dd_ferris
 
 Draws the Ferris mascot and Rust logo BMP images on the round 240x240 GC9A01 display using the async `display-driver` crate stack (`display-driver`, `display-driver-spi`, `display-driver-gc9a01`).
