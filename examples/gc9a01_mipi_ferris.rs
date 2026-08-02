@@ -149,9 +149,7 @@ async fn main(_spawner: Spawner) {
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 4] = [
     hal::binary_info::rp_program_name!(c"gc9a01_mipi_ferris"),
-    hal::binary_info::rp_program_description!(
-        c"GC9A01 LCD Mipidsi Ferris example for RP2350"
-    ),
+    hal::binary_info::rp_program_description!(c"GC9A01 LCD Mipidsi Ferris example for RP2350"),
     hal::binary_info::rp_cargo_version!(),
     hal::binary_info::rp_program_build_attribute!(),
 ];

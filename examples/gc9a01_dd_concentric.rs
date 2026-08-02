@@ -53,17 +53,17 @@ use embassy_rp::gpio::{Level, Output};
 use embassy_rp::spi::{Config, Spi};
 use embassy_time::{Delay, Timer};
 
-use display_driver::{panel::reset::LCDResetOption, ColorFormat, DisplayDriver, Orientation};
-use display_driver_gc9a01::{spec::Generic240x240Type1, Gc9a01};
+use display_driver::{ColorFormat, DisplayDriver, Orientation, panel::reset::LCDResetOption};
+use display_driver_gc9a01::{Gc9a01, spec::Generic240x240Type1};
 use display_driver_spi::SpiDisplayBus;
 
 use embedded_graphics::{
-    framebuffer::{buffer_size, Framebuffer},
+    framebuffer::{Framebuffer, buffer_size},
     geometry::Point,
-    mono_font::{ascii::FONT_9X18, MonoTextStyle},
+    mono_font::{MonoTextStyle, ascii::FONT_9X18},
     pixelcolor::{
-        raw::{BigEndian, RawU16},
         Rgb565,
+        raw::{BigEndian, RawU16},
     },
     prelude::*,
     text::{Alignment, Text},
