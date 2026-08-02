@@ -123,6 +123,60 @@ cargo run --example zermatt_snow
 
 Wiring is identical to the `zermatt` example.
 
+#### Waveshare 0.96" ST7735S Display Examples
+
+The workspace includes examples for the Waveshare 0.96" 80x160 ST7735S LCD module built with both the **`display-driver`** async framework (`st7735_dd_*`) and the **`mipidsi`** driver crate (`st7735_mipi_*`).
+
+**Common Wiring for Waveshare 0.96" ST7735S LCD:**
+
+```text
+     Raspberry Pi Pico 2          Waveshare 0.96" ST7735S LCD
+   +-----------------------+      +---------------------------+
+   |                       |      |                           |
+   |  3V3 (Pin 36) --------+------+-> VCC                     |
+   |  GND (Pin 38) --------+------+-> GND                     |
+   |  GPIO17 (Pin 22) -----+------+-> CS                      |
+   |  GPIO21 (Pin 27) -----+------+-> RST                     |
+   |  GPIO20 (Pin 26) -----+------+-> DC                      |
+   |  GPIO19 (Pin 25) -----+------+-> DIN(MOSI)               |
+   |  GPIO18 (Pin 24) -----+------+-> CLK(SCK)                |
+   |  GPIO14 (Pin 19) -----+------+-> BL (Backlight)          |
+   |                       |      |                           |
+   +-----------------------+      +---------------------------+
+```
+
+##### st7735_dd_ferris
+
+Draws the Ferris mascot and Rust logo BMP images on the 80x160 ST7735S display using the async `display-driver` crate stack (`display-driver`, `display-driver-spi`, `display-driver-st7735`).
+
+```bash
+cargo run --example st7735_dd_ferris
+```
+
+##### st7735_dd_animation
+
+Runs a smooth 30 FPS geometric pattern animation (rotating circles, pulsating center ring, and expanding corner accents) rendered into a 160x80 framebuffer and flushed asynchronously via `display-driver`.
+
+```bash
+cargo run --example st7735_dd_animation
+```
+
+##### st7735_mipi_ferris
+
+Draws the Ferris mascot and Rust logo BMP images using the `mipidsi` display driver crate and `display-interface-spi`.
+
+```bash
+cargo run --example st7735_mipi_ferris
+```
+
+##### st7735_mipi_text
+
+Draws text header banners, a separator line, colored geometric shapes, and bottom text labels using `mipidsi` and `display-interface-spi`.
+
+```bash
+cargo run --example st7735_mipi_text
+```
+
 ### 1-Wire Examples
 
 #### ds18b20
