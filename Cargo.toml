@@ -54,6 +54,7 @@ display-driver = { version = "0.1.0", features = ["embedded-graphics"] }
 display-driver-spi = "0.1.0"
 display-driver-st7735 = "0.1.0"
 display-driver-gc9a01 = "0.1.0"
+display-driver-st7789 = "0.1.0"
 micromath = "2.1.0"
 mipidsi = "0.8.0"
 display-interface-spi = "0.5.0"

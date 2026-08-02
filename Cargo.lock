@@ -1727,6 +1727,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "display-driver-st7789"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57aa235958aa3ac0fb20102442c8f52769b3e39ba4fedaa95e393c4046d5818b"
+dependencies = [
+ "delegate",
+ "display-driver",
+ "display-driver-mipidcs",
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+]
+
+[[package]]
 name = "display-interface"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6660,6 +6673,7 @@ dependencies = [
  "display-driver-gc9a01",
  "display-driver-spi",
  "display-driver-st7735",
+ "display-driver-st7789",
  "display-interface-spi",
  "embassy-executor",
  "embassy-futures",

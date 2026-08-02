@@ -238,6 +238,16 @@ Draws the Ferris mascot and Rust logo BMP images on the 240x240 GC9A01 display u
 cargo run --example gc9a01_mipi_ferris
 ```
 
+#### Adafruit 1.14" Color Newxie ST7789 Display Examples
+
+##### newxie_dd_thermometer
+
+Reads temperature and pressure from an Adafruit BMP580 sensor over I2C and displays an analog-style thermometer graphic with cycling digital measurements (Fahrenheit, Celsius, pressure hPa, sensor ID) on an Adafruit 1.14" 240x135 ST7789 display using `display-driver` (`display-driver-st7789`).
+
+```bash
+cargo run --example newxie_dd_thermometer
+```
+
 ### 1-Wire Examples
 
 #### ds18b20

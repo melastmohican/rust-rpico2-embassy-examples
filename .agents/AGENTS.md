@@ -8,3 +8,8 @@ Before committing and pushing code changes, ALWAYS execute all local CI checks m
 2. **Check Examples:** `cargo check --examples`
 3. **Clippy Check:** `cargo clippy --examples -- -D warnings`
 4. **Build Release:** `cargo build --release && cargo build --release --examples`
+
+## Real Hardware Testing Verification
+
+Do NOT commit or push code changes until the example / feature has been run and verified on real hardware by the user.
+
