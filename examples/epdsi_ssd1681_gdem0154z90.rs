@@ -273,10 +273,7 @@ async fn main(_spawner: Spawner) {
     // The refresh mode deliberately stays `Full` (0x22 = 0xF7). Trigger 0xFC selects the SSD1681
     // built-in fast LUT, which only exists for monochrome panels — on a BWR panel it is slow *and*
     // discards red. What makes this phase "partial" is the narrowed RAM window below.
-    // `core::debug_assert_eq!` explicitly: `defmt::*` also exports a `debug_assert_eq!` (formatted
-    // output via `defmt::Format`, which `Ssd1681RefreshMode` doesn't implement without epdsi's
-    // `defmt` feature), and the two names collide.
-    core::debug_assert_eq!(epd.controller().refresh_mode(), Ssd1681RefreshMode::Full);
+    defmt::debug_assert_eq!(epd.controller().refresh_mode(), Ssd1681RefreshMode::Full);
 
     // Bottom status band, updated in place. The Rust logo ends at y = 139 (75 + 64), so the band
     // starts at y = 140 and the header/logos painted in Phase 1 are never touched.
