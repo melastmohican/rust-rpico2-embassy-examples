@@ -2477,6 +2477,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "epdsi"
+version = "0.1.7"
+dependencies = [
+ "embedded-graphics-core",
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+ "maybe-async-cfg",
+]
+
+[[package]]
 name = "equator"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3014,6 +3024,12 @@ checksum = "cb4cb245038516f5f85277875cdaa4f7d2c9a0fa0468de06ed190163b1581fcf"
 dependencies = [
  "percent-encoding",
 ]
+
+[[package]]
+name = "format_no_std"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9ae45e32b0bfe2c62c805f8e87027b5aa08562000326edbc5b421ab6d92873a7"
 
 [[package]]
 name = "fs_at"
@@ -3618,7 +3634,7 @@ dependencies = [
  "icu_decimal",
  "icu_locale_core",
  "icu_provider",
- "pulldown-cmark",
+ "pulldown-cmark 0.13.4",
  "resvg",
  "skrifa 0.42.1",
 ]
@@ -4630,12 +4646,49 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ca88d725a0a943b096803bd34e73a4437208b6077654cc4ecb2947a5f91618d"
 
 [[package]]
+name = "manyhow"
+version = "0.11.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b33efb3ca6d3b07393750d4030418d594ab1139cee518f0dc88db70fec873587"
+dependencies = [
+ "manyhow-macros",
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+ "syn 2.0.117",
+]
+
+[[package]]
+name = "manyhow-macros"
+version = "0.11.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46fce34d199b78b6e6073abf984c9cf5fd3e9330145a93ee0738a7443e371495"
+dependencies = [
+ "proc-macro-utils",
+ "proc-macro2",
+ "quote",
+]
+
+[[package]]
 name = "matchers"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d1525a2a28c7f4fa0fc98bb91ae755d1e2d1505079e05539e35bc876b5d65ae9"
 dependencies = [
  "regex-automata",
+]
+
+[[package]]
+name = "maybe-async-cfg"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8dbfaa67a76e2623580df07d6bb5e7956c0a4bae4b418314083a9c619bd66627"
+dependencies = [
+ "manyhow",
+ "proc-macro2",
+ "pulldown-cmark 0.11.3",
+ "quote",
+ "syn 1.0.109",
 ]
 
 [[package]]
@@ -6005,6 +6058,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "proc-macro-utils"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eeaf08a13de400bc215877b5bdc088f241b12eb42f0a548d3390dc1c56bb7071"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "smallvec",
+]
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6030,6 +6094,17 @@ checksum = "4488a4a36b9a4ba6b9334a32a39971f77c1436ec82c38707bce707699cc3bbcb"
 dependencies = [
  "quote",
  "syn 2.0.117",
+]
+
+[[package]]
+name = "pulldown-cmark"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "679341d22c78c6c649893cbd6c3278dcbe9fc4faa62fea3a9296ae2b50c14625"
+dependencies = [
+ "bitflags 2.11.1",
+ "memchr",
+ "unicase",
 ]
 
 [[package]]
@@ -6685,6 +6760,8 @@ dependencies = [
  "embedded-hal 1.0.0",
  "embedded-hal-async",
  "embedded-hal-bus",
+ "epdsi",
+ "format_no_std",
  "hs3003",
  "lcd-async",
  "libm",
@@ -7747,9 +7824,9 @@ dependencies = [
 
 [[package]]
 name = "tinybmp"
-version = "0.7.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "acb540c3e6f049f914d9c3eaf86ca415e264cf42d2b25bb5c24241af1a1e3aea"
+checksum = "df43af2cb7b369009aa14144959bb4f2720ab62034c9073242f2d3a186c2edb6"
 dependencies = [
  "embedded-graphics",
 ]
