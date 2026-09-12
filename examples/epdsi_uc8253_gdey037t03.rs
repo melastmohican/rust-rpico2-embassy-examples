@@ -234,7 +234,9 @@ async fn main(_spawner: Spawner) {
     epd.init(&mut delay).await.unwrap();
 
     // Prime the old plane to white so the update has a clean base.
-    epd.clear_frame(ColorChannel::RedYellow, 0xFF).await.unwrap();
+    epd.clear_frame(ColorChannel::RedYellow, 0xFF)
+        .await
+        .unwrap();
 
     let mut bw_buf = [0xFFu8; FRAME_BYTES];
 

@@ -120,7 +120,10 @@ async fn main(_spawner: Spawner) {
     info!("E-Paper display initialized");
 
     // Clear Red frame buffer (DTM2) to 0x00 (no red pixels, preventing controller RAM noise)
-    driver.clear_frame(ColorChannel::RedYellow, 0x00).await.unwrap();
+    driver
+        .clear_frame(ColorChannel::RedYellow, 0x00)
+        .await
+        .unwrap();
 
     // Full frame buffer (168 width x 384 height / 8 = 8,064 bytes RAM)
     let mut buffer = [0u8; (E2290KS0F1::WIDTH as usize * E2290KS0F1::HEIGHT as usize) / 8];
@@ -288,7 +291,9 @@ async fn main(_spawner: Spawner) {
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 4] = [
     hal::binary_info::rp_program_name!(c"epdsi_pdi_e2290ks0f1"),
-    hal::binary_info::rp_program_description!(c"epdsi async Pervasive Bw Driver F/E2290KS0F1 example for RP2350"),
+    hal::binary_info::rp_program_description!(
+        c"epdsi async Pervasive Bw Driver F/E2290KS0F1 example for RP2350"
+    ),
     hal::binary_info::rp_cargo_version!(),
     hal::binary_info::rp_program_build_attribute!(),
 ];

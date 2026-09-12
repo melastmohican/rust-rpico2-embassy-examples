@@ -183,8 +183,12 @@ async fn main(_spawner: Spawner) {
 
     // Clear both display controller RAM banks to white. On this monochrome panel the secondary
     // RAM (0x26) is not a color plane but the "previous image" used by differential updates.
-    epd.clear_frame(ColorChannel::BlackWhite, 0xFF).await.unwrap();
-    epd.clear_frame(ColorChannel::RedYellow, 0xFF).await.unwrap();
+    epd.clear_frame(ColorChannel::BlackWhite, 0xFF)
+        .await
+        .unwrap();
+    epd.clear_frame(ColorChannel::RedYellow, 0xFF)
+        .await
+        .unwrap();
 
     // Frame buffer: 128 x 250 / 8 = 4,000 bytes (0xFF = white)
     let mut bw_buf = [0xFFu8; FRAME_BYTES];
@@ -396,7 +400,9 @@ async fn main(_spawner: Spawner) {
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 4] = [
     hal::binary_info::rp_program_name!(c"epdsi_ssd1680_gdem0213b74"),
-    hal::binary_info::rp_program_description!(c"epdsi async SSD1680/GDEM0213B74 example for RP2350"),
+    hal::binary_info::rp_program_description!(
+        c"epdsi async SSD1680/GDEM0213B74 example for RP2350"
+    ),
     hal::binary_info::rp_cargo_version!(),
     hal::binary_info::rp_program_build_attribute!(),
 ];

@@ -197,8 +197,7 @@ fn draw_frame(
         .unwrap();
 
     let mut count_buf = [0u8; 32];
-    let count_str =
-        format_no_std::show(&mut count_buf, format_args!("Update #{}", count)).unwrap();
+    let count_str = format_no_std::show(&mut count_buf, format_args!("Update #{}", count)).unwrap();
     Text::new(count_str, Point::new(24, 720), text_style)
         .draw(display)
         .unwrap();
@@ -248,20 +247,26 @@ async fn main(_spawner: Spawner) {
         .await
         .unwrap();
     epd.set_cursor(0, 0).await.unwrap();
-    epd.clear_frame(ColorChannel::BlackWhite, 0xFF).await.unwrap();
+    epd.clear_frame(ColorChannel::BlackWhite, 0xFF)
+        .await
+        .unwrap();
 
     epd.set_window(0, 0, GDEQ0426T82::WIDTH - 1, GDEQ0426T82::HEIGHT - 1)
         .await
         .unwrap();
     epd.set_cursor(0, 0).await.unwrap();
-    epd.clear_frame(ColorChannel::RedYellow, 0xFF).await.unwrap();
+    epd.clear_frame(ColorChannel::RedYellow, 0xFF)
+        .await
+        .unwrap();
 
     info!("--- Phase 0: RAM auto-fill check ---");
 
     // Black. The elapsed time is the direct evidence: streaming 48,000 bytes over SPI takes
     // milliseconds, while the pattern generator is a handful of bytes plus a BUSY wait.
     let start = Instant::now();
-    epd.clear_frame(ColorChannel::BlackWhite, 0x00).await.unwrap();
+    epd.clear_frame(ColorChannel::BlackWhite, 0x00)
+        .await
+        .unwrap();
     info!("clear_frame(black) took {} us", start.elapsed().as_micros());
     info!("Refreshing; expect a uniform BLACK panel, no banding...");
     epd.refresh(&mut delay).await.unwrap();
@@ -269,13 +274,17 @@ async fn main(_spawner: Spawner) {
 
     // Back to white, and re-seed the differential base bank alongside it.
     let start = Instant::now();
-    epd.clear_frame(ColorChannel::BlackWhite, 0xFF).await.unwrap();
+    epd.clear_frame(ColorChannel::BlackWhite, 0xFF)
+        .await
+        .unwrap();
     info!("clear_frame(white) took {} us", start.elapsed().as_micros());
     epd.set_window(0, 0, GDEQ0426T82::WIDTH - 1, GDEQ0426T82::HEIGHT - 1)
         .await
         .unwrap();
     epd.set_cursor(0, 0).await.unwrap();
-    epd.clear_frame(ColorChannel::RedYellow, 0xFF).await.unwrap();
+    epd.clear_frame(ColorChannel::RedYellow, 0xFF)
+        .await
+        .unwrap();
     info!("Refreshing; expect a uniform WHITE panel, no banding...");
     epd.refresh(&mut delay).await.unwrap();
     Timer::after_millis(3000).await;
@@ -361,7 +370,9 @@ async fn main(_spawner: Spawner) {
         .await
         .unwrap();
     epd.set_cursor(0, 0).await.unwrap();
-    epd.clear_frame(ColorChannel::RedYellow, 0xFF).await.unwrap();
+    epd.clear_frame(ColorChannel::RedYellow, 0xFF)
+        .await
+        .unwrap();
 
     epd.set_window(0, 0, GDEQ0426T82::WIDTH - 1, GDEQ0426T82::HEIGHT - 1)
         .await
@@ -386,7 +397,9 @@ async fn main(_spawner: Spawner) {
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 4] = [
     hal::binary_info::rp_program_name!(c"epdsi_ssd1677_gdeq0426t82"),
-    hal::binary_info::rp_program_description!(c"epdsi async SSD1677/GDEQ0426T82 example for RP2350"),
+    hal::binary_info::rp_program_description!(
+        c"epdsi async SSD1677/GDEQ0426T82 example for RP2350"
+    ),
     hal::binary_info::rp_cargo_version!(),
     hal::binary_info::rp_program_build_attribute!(),
 ];

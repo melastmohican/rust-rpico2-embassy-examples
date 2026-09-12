@@ -305,8 +305,12 @@ async fn main(_spawner: Spawner) {
     // No set_window: a full-frame write must not be wrapped in a partial-window session, and this
     // panel has no partial mode anyway.
     info!("Sending diagnostic pattern (white | black | red)...");
-    epd.write_frame(ColorChannel::BlackWhite, &bw_buf).await.unwrap();
-    epd.write_frame(ColorChannel::RedYellow, &red_buf).await.unwrap();
+    epd.write_frame(ColorChannel::BlackWhite, &bw_buf)
+        .await
+        .unwrap();
+    epd.write_frame(ColorChannel::RedYellow, &red_buf)
+        .await
+        .unwrap();
 
     info!("Refreshing display hardware (full waveform, expect ~16-20 s)...");
     refresh_timed(&mut epd, &mut delay).await;
@@ -333,8 +337,12 @@ async fn main(_spawner: Spawner) {
     }
 
     info!("Sending both planes (10,800 bytes each)...");
-    epd.write_frame(ColorChannel::BlackWhite, &bw_buf).await.unwrap();
-    epd.write_frame(ColorChannel::RedYellow, &red_buf).await.unwrap();
+    epd.write_frame(ColorChannel::BlackWhite, &bw_buf)
+        .await
+        .unwrap();
+    epd.write_frame(ColorChannel::RedYellow, &red_buf)
+        .await
+        .unwrap();
 
     info!("Refreshing display hardware (full waveform, expect ~16-20 s)...");
     refresh_timed(&mut epd, &mut delay).await;
