@@ -178,9 +178,13 @@ fn draw_static_content(
     Text::new("RP2350 Pico 2", Point::new(8, 170), small_text_style)
         .draw(page)
         .unwrap();
-    Text::new("epdsi async PageBufferPair", Point::new(8, 184), small_text_style)
-        .draw(page)
-        .unwrap();
+    Text::new(
+        "epdsi async PageBufferPair",
+        Point::new(8, 184),
+        small_text_style,
+    )
+    .draw(page)
+    .unwrap();
     Text::new(mode_label, Point::new(8, 198), small_text_style)
         .draw(page)
         .unwrap();
@@ -225,8 +229,7 @@ fn draw_band(page: &mut PageBufferPair, count: u32, label: &str) {
         .unwrap();
 
     let mut count_buf = [0u8; 32];
-    let count_str =
-        format_no_std::show(&mut count_buf, format_args!("Update #{}", count)).unwrap();
+    let count_str = format_no_std::show(&mut count_buf, format_args!("Update #{}", count)).unwrap();
     Text::new(
         count_str,
         Point::new(8, BAND_Y as i32 + 28),
@@ -380,8 +383,7 @@ async fn main(_spawner: Spawner) {
         "Full {} ms vs FastFull {} ms. Reference for this glass is 20048 vs 16180 (~19% faster). \
          Good Display quote ~20000 vs ~19000 on their own glass, so expect the saving to vary \
          with the OTP waveform rather than assuming either figure.",
-        full_ms,
-        fast_ms
+        full_ms, fast_ms
     );
 
     Timer::after_millis(2000).await;
@@ -485,7 +487,9 @@ async fn main(_spawner: Spawner) {
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 4] = [
     hal::binary_info::rp_program_name!(c"epdsi_ssd1680_gdey0266z90_tri_epd"),
-    hal::binary_info::rp_program_description!(c"epdsi async SSD1680/GDEY0266Z90 PageBufferPair example for RP2350"),
+    hal::binary_info::rp_program_description!(
+        c"epdsi async SSD1680/GDEY0266Z90 PageBufferPair example for RP2350"
+    ),
     hal::binary_info::rp_cargo_version!(),
     hal::binary_info::rp_program_build_attribute!(),
 ];

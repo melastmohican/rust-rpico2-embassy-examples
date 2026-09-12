@@ -113,12 +113,10 @@ async fn main(_spawner: Spawner) {
         .unwrap();
 
     // Frame buffers: 200 x 200 / 8 = 5,000 bytes each
-    let mut bw_buf = [POLARITY.bw_background_byte(); (GDEM0154Z90::WIDTH as usize
-        * GDEM0154Z90::HEIGHT as usize)
-        / 8];
-    let mut red_buf = [POLARITY.accent_background_byte(); (GDEM0154Z90::WIDTH as usize
-        * GDEM0154Z90::HEIGHT as usize)
-        / 8];
+    let mut bw_buf = [POLARITY.bw_background_byte();
+        (GDEM0154Z90::WIDTH as usize * GDEM0154Z90::HEIGHT as usize) / 8];
+    let mut red_buf = [POLARITY.accent_background_byte();
+        (GDEM0154Z90::WIDTH as usize * GDEM0154Z90::HEIGHT as usize) / 8];
 
     let ferris_bmp: Bmp<BinaryColor> = Bmp::from_slice(include_bytes!("ferrisbw.bmp")).unwrap();
     let rust_bmp: Bmp<BinaryColor> = Bmp::from_slice(include_bytes!("rustbw.bmp")).unwrap();
@@ -216,9 +214,13 @@ async fn main(_spawner: Spawner) {
             .draw(&mut page)
             .unwrap();
 
-        Text::new("epdsi async PageBufferPair", Point::new(10, 185), text_style)
-            .draw(&mut page)
-            .unwrap();
+        Text::new(
+            "epdsi async PageBufferPair",
+            Point::new(10, 185),
+            text_style,
+        )
+        .draw(&mut page)
+        .unwrap();
 
         // Each RAM write starts from the window origin, so reset window + cursor before both
         // channels.
@@ -343,7 +345,9 @@ async fn main(_spawner: Spawner) {
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 4] = [
     hal::binary_info::rp_program_name!(c"epdsi_ssd1681_gdem0154z90_tri_epd"),
-    hal::binary_info::rp_program_description!(c"epdsi async SSD1681/GDEM0154Z90 PageBufferPair example for RP2350"),
+    hal::binary_info::rp_program_description!(
+        c"epdsi async SSD1681/GDEM0154Z90 PageBufferPair example for RP2350"
+    ),
     hal::binary_info::rp_cargo_version!(),
     hal::binary_info::rp_program_build_attribute!(),
 ];

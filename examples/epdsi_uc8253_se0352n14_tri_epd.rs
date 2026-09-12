@@ -195,9 +195,13 @@ fn draw_black_content(page: &mut PageBufferPair, rust_bmp: &Bmp<BinaryColor>) {
         .draw(page)
         .unwrap();
 
-    Text::new("epdsi async PageBufferPair", Point::new(10, 225), text_style)
-        .draw(page)
-        .unwrap();
+    Text::new(
+        "epdsi async PageBufferPair",
+        Point::new(10, 225),
+        text_style,
+    )
+    .draw(page)
+    .unwrap();
 
     Line::new(Point::new(10, 240), Point::new(229, 240))
         .into_styled(stroke)
@@ -311,8 +315,12 @@ async fn main(_spawner: Spawner) {
     // No set_window: a full-frame write must not be wrapped in a partial-window session, and
     // this panel has no partial mode anyway.
     info!("Sending diagnostic pattern (white | black | red)...");
-    epd.write_frame(ColorChannel::BlackWhite, &bw_buf).await.unwrap();
-    epd.write_frame(ColorChannel::RedYellow, &red_buf).await.unwrap();
+    epd.write_frame(ColorChannel::BlackWhite, &bw_buf)
+        .await
+        .unwrap();
+    epd.write_frame(ColorChannel::RedYellow, &red_buf)
+        .await
+        .unwrap();
 
     info!("Refreshing display hardware (full waveform, expect ~16-20 s)...");
     refresh_timed(&mut epd, &mut delay).await;
@@ -335,8 +343,12 @@ async fn main(_spawner: Spawner) {
     }
 
     info!("Sending both planes (10,800 bytes each)...");
-    epd.write_frame(ColorChannel::BlackWhite, &bw_buf).await.unwrap();
-    epd.write_frame(ColorChannel::RedYellow, &red_buf).await.unwrap();
+    epd.write_frame(ColorChannel::BlackWhite, &bw_buf)
+        .await
+        .unwrap();
+    epd.write_frame(ColorChannel::RedYellow, &red_buf)
+        .await
+        .unwrap();
 
     info!("Refreshing display hardware (full waveform, expect ~16-20 s)...");
     refresh_timed(&mut epd, &mut delay).await;
@@ -355,7 +367,9 @@ async fn main(_spawner: Spawner) {
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 4] = [
     hal::binary_info::rp_program_name!(c"epdsi_uc8253_se0352n14_tri_epd"),
-    hal::binary_info::rp_program_description!(c"epdsi async UC8253/SE0352N14 PageBufferPair example for RP2350"),
+    hal::binary_info::rp_program_description!(
+        c"epdsi async UC8253/SE0352N14 PageBufferPair example for RP2350"
+    ),
     hal::binary_info::rp_cargo_version!(),
     hal::binary_info::rp_program_build_attribute!(),
 ];
