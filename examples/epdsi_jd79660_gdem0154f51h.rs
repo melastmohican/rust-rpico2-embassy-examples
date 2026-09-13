@@ -314,7 +314,9 @@ async fn main(_spawner: Spawner) {
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 4] = [
     hal::binary_info::rp_program_name!(c"epdsi_jd79660_gdem0154f51h"),
-    hal::binary_info::rp_program_description!(c"epdsi async JD79660/GDEM0154F51H example for RP2350"),
+    hal::binary_info::rp_program_description!(
+        c"epdsi async JD79660/GDEM0154F51H example for RP2350"
+    ),
     hal::binary_info::rp_cargo_version!(),
     hal::binary_info::rp_program_build_attribute!(),
 ];
