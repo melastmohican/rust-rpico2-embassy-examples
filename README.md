@@ -2,6 +2,8 @@
 
 This repository contains examples for the Raspberry Pi Pico 2 (RP2350) board, written in Rust using the [Embassy](https://embassy.dev/) async framework.
 
+> 🎉 Featured on the [Adafruit blog](https://blog.adafruit.com/2026/06/10/rust-embassy-examples-for-raspberry-pi-pico-2/) (June 2026).
+
 ## Project generated
 
 ```shell
