@@ -250,6 +250,189 @@ Reads temperature and pressure from an Adafruit BMP580 sensor over I2C and displ
 cargo run --example newxie_dd_thermometer
 ```
 
+### E-Paper Examples (epdsi)
+
+Async twins of every e-paper example in [`rust-rpico2-discovery`](https://github.com/melastmohican/rust-rpico2-discovery) — same board, same panels, same wiring, same content and phases; only the transport differs (`embassy-rp`'s async SPI/GPIO instead of `rp235x-hal`'s blocking API, `epdsi` built with `default-features = false, features = ["graphics"]`). See that repo's README for full per-panel narrative (refresh-mode behavior, ink polarity, timing notes, provenance caveats) — not repeated here.
+
+Fourteen use the [Good Display DESPI-C02 adapter board](https://www.good-display.com/product/516.html); four (the Pervasive Displays panels) use the EXT3-1 board with a 10-way rainbow cable.
+
+**Wiring (DESPI-C02 adapter board):**
+
+| Pico 2 Pin       | DESPI-C02 Pin / Function |
+|------------------|--------------------------|
+| 3V3 (Pin 36)     | VCC                      |
+| GND (Pin 38)     | GND                      |
+| GPIO11 (Pin 15)  | RST                      |
+| GPIO12 (Pin 16)  | DC                       |
+| GPIO13 (Pin 17)  | BUSY                     |
+| GPIO16 (Pin 21)  | MISO                     |
+| GPIO17 (Pin 22)  | CS                       |
+| GPIO18 (Pin 24)  | SCK                      |
+| GPIO19 (Pin 25)  | MOSI                     |
+
+**Wiring (EXT3-1/EPDK, 10-way rainbow cable):**
+
+| Pico Pin        | Cable Color | EXT3 Pin / Function    |
+|-----------------|-------------|-------------------------|
+| 3V3 (Pin 36)    | Black       | 1 / VCC                 |
+| GPIO18 (Pin 24) | Brown       | 2 / SCK (SPI Clock)     |
+| GPIO13 (Pin 17) | Red         | 3 / BUSY                |
+| GPIO12 (Pin 16) | Orange      | 4 / DC (Data/Cmd)       |
+| GPIO11 (Pin 15) | Yellow      | 5 / RST (Reset)         |
+| GPIO16 (Pin 21) | Green       | 6 / MISO                |
+| GPIO19 (Pin 25) | Blue        | 7 / MOSI                |
+| NC              | Violet      | 8 / FCSM (Flash CS, unused) |
+| GPIO17 (Pin 22) | Grey        | 9 / ECSM (Display CS)   |
+| GND (Pin 38)    | White       | 10 / GND                |
+
+> **EXT3-1 J3 jumper:** OPEN (10 µH) for panels ≤ 3.7" (`E2266KS0C1`, `E2290KS0F1`, `E2154QS0F1`); CLOSED (47 µH) for `E2417QS0A3` (4.2"). Wrong setting chokes the DC-DC booster on current bursts, causing voltage sags and BUSY hangs.
+
+#### epdsi_jd79661_zjy122250
+
+Good Display ZJY122250-0213AJH-E5 2.13" Quad-Color (Black/White/Yellow/Red, 122×250), `Jd79661Controller`. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_jd79661_zjy122250
+```
+
+#### epdsi_jd79660_gdem0154f51h
+
+Good Display GDEM0154F51H 1.54" Quad-Color (Black/White/Yellow/Red, 200×200, Waveshare *1.54inch e-Paper (G)*), `Jd79660Controller` — shares its SPI register table with `Jd79661Controller` (both wrap `Jd7966xController`), differing only in which registers `init_sequence` writes. Wiring: DESPI-C02, above.
+
+> Not independently confirmed on hardware in this repo or in `rust-rpico2-discovery`'s own doc for the blocking twin — build and flash to verify before relying on it.
+
+```bash
+cargo run --example epdsi_jd79660_gdem0154f51h
+```
+
+#### epdsi_ssd1681_gdem0154z90
+
+Dalian Good Display GDEM0154Z90 1.54" Tri-Color (200×200), `Ssd1681Controller`. Full Tri-Color content plus a partial *window* refresh loop — no fast/differential waveform on this panel, every update takes ~14 s. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1681_gdem0154z90
+```
+
+#### epdsi_ssd1681_gdem0154z90_tri_epd
+
+Full-parity companion to `epdsi_ssd1681_gdem0154z90` — same content, same hardware — drawn entirely through `PageBufferPair`/`TriColor` instead of two separate `PageBuffer`s. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1681_gdem0154z90_tri_epd
+```
+
+#### epdsi_ssd1680_gdem0213b74
+
+Dalian Good Display GDEM0213B74 2.13" Monochrome (122×250), `Ssd1680Controller`. Full refresh, then a fast *differential* partial-window logo-swap loop, then a full-waveform cleanup pass. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1680_gdem0213b74
+```
+
+#### epdsi_ssd1680_gdey0266z90
+
+Good Display GDEY0266Z90 2.66" Tri-Color (Black/White/Red, 152×296), `Ssd1680Controller`. Demonstrates every refresh mode the SSD1680 exposes for a Tri-Color panel: `Full`, a partial window loop, `FastFull`, and `BaseMap`/`Partial` at their real (non-differential on colour glass) cost. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1680_gdey0266z90
+```
+
+#### epdsi_ssd1680_gdey0266z90_tri_epd
+
+Full-parity companion to `epdsi_ssd1680_gdey0266z90` — drawn entirely through `PageBufferPair`/`TriColor`. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1680_gdey0266z90_tri_epd
+```
+
+#### epdsi_ssd1680_gdey0266t90
+
+Good Display GDEY0266T90 / Waveshare 2.66" e-Paper, Monochrome (152×296), `Ssd1680Controller` — a different, monochrome-only glass from the Tri-Color `GDEY0266Z90` above, same nominal size and controller. Genuinely fast: real Full and Partial (differential) refresh. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1680_gdey0266t90
+```
+
+#### epdsi_ssd1680_gdey0266t90_gray4
+
+Companion to `epdsi_ssd1680_gdey0266t90` — drives the panel's 4-level grayscale mode (White/Light/Dark/Black) instead of plain monochrome. `GDEY0266T90::GRAY4` is Adafruit_EPD-sourced, not Good Display/Waveshare material. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1680_gdey0266t90_gray4
+```
+
+#### epdsi_uc8253_gdey037t03
+
+Dalian Good Display GDEY037T03 3.7" Monochrome (240×416), `Uc8253Controller`. Full refresh, a partial-window logo-swap loop, and a full-waveform cleanup pass. BUSY is active-**low** on this controller. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_uc8253_gdey037t03
+```
+
+#### epdsi_uc8253_se0352n14
+
+Waveshare 3.52" e-Paper (B) SE0352N14-TNG-A0 Tri-Color (240×360), `Uc8253Controller` with `Uc8253Variant::Se0352n14` — the variant is not optional: this panel disagrees with `GDEY037T03` on RAM plane routing and ink polarity despite sharing the same controller. Full refresh only (~16-20 s); do not loop, Waveshare specify ≥180 s between refreshes. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_uc8253_se0352n14
+```
+
+#### epdsi_uc8253_se0352n14_tri_epd
+
+Full-parity companion to `epdsi_uc8253_se0352n14` — drawn entirely through `PageBufferPair`/`TriColor`; uses `PlanePolarity::UC8253` (the one panel where *both* planes are inverted). Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_uc8253_se0352n14_tri_epd
+```
+
+#### epdsi_ssd1677_gdeq0426t82
+
+Dalian Good Display GDEQ0426T82 4.26" Monochrome (800×480), `Ssd1677Controller`. Renders portrait (480×800, ribbon at bottom) via `DisplayRotation::Rotate270`; the panel's reversed gates are compensated in software inside `Ssd1677Controller` (transparent to callers). Full refresh, then a differential logo-swap loop, then a full-waveform cleanup pass. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1677_gdeq0426t82
+```
+
+#### epdsi_ssd1677_gdeq0426t82_gray4
+
+Companion to `epdsi_ssd1677_gdeq0426t82` — drives the panel's 4-level grayscale mode. `GDEQ0426T82::GRAY4` is Adafruit_EPD-sourced, not Seeed/Good Display material, and — unlike `GDEY0266T90`'s single-pass Gray4 mode above — needs a **two-pass** refresh (`Ssd1677RefreshMode::Gray4Preclear` then `Gray4`, with an LUT/voltage-register reload between). Confirmed rendering four distinct gray levels correctly on this board. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1677_gdeq0426t82_gray4
+```
+
+#### epdsi_pdi_e2266ks0c1
+
+Pervasive Displays E2266KS0C1 2.66" Monochrome, `PervasiveBwController` (Driver C). Both Normal Full Refresh and Fast Differential Refresh. Wiring: EXT3-1/EPDK, above (J3 open).
+
+```bash
+cargo run --example epdsi_pdi_e2266ks0c1
+```
+
+#### epdsi_pdi_e2290ks0f1
+
+Pervasive Displays E2290KS0F1 2.90" Monochrome (Driver F COG), `PervasiveBwController`. Both Normal Full Refresh and Fast Differential Refresh. Wiring: EXT3-1/EPDK, above (J3 open).
+
+```bash
+cargo run --example epdsi_pdi_e2290ks0f1
+```
+
+#### epdsi_pdi_e2154qs0f1
+
+Pervasive Displays E2154QS0F1 1.54" Quad-Color (BWRY / Spectra-4, Driver F COG, 152×152), `PervasiveBwryController`. Bit-banged 3-wire OTP register read, 2bpp packed BWRY frame buffers (5,776 bytes). Wiring: EXT3-1/EPDK, above (J3 open).
+
+```bash
+cargo run --example epdsi_pdi_e2154qs0f1
+```
+
+#### epdsi_pdi_e2417qs0a3
+
+Pervasive Displays E2417QS0A3 4.20" Quad-Color (BWRY / Spectra-4, Driver A COG, 400×300), `PervasiveBwryController`. Bit-banged 3-wire OTP register read, 2bpp packed BWRY frame buffers (30,000 bytes). Wiring: EXT3-1/EPDK, above (**J3 closed**).
+
+```bash
+cargo run --example epdsi_pdi_e2417qs0a3
+```
+
 ### 1-Wire Examples
 
 #### ds18b20
