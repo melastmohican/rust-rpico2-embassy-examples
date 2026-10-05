@@ -2478,9 +2478,9 @@ dependencies = [
 
 [[package]]
 name = "epdsi"
-version = "0.6.0"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab2df74d7153192aa797d935b90c64c7f1bbdd16dc9fe8d9ae7fcb0e0459446e"
+checksum = "d7b846f35040cd480a8fa35e234e11ca1a15ee76969f3dc2328ed8140058cfba"
 dependencies = [
  "defmt 1.0.1",
  "embedded-graphics-core",

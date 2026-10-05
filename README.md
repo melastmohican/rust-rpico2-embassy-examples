@@ -329,6 +329,14 @@ Dalian Good Display GDEM0213B74 2.13" Monochrome (122×250), `Ssd1680Controller`
 cargo run --example epdsi_ssd1680_gdem0213b74
 ```
 
+#### epdsi_ssd1680_gdem0213b74_gray4
+
+Companion to `epdsi_ssd1680_gdem0213b74`: drives the panel's 4-level grayscale mode (White/Light/Dark/Black) instead of plain monochrome. `GDEM0213B74::GRAY4` is Adafruit_EPD-sourced, byte-identical to `GDEY0266T90::GRAY4` below. Layout is sized for this panel's narrower 122px width (single-letter swatch labels, three rings instead of four); see the module doc for the text-fit math. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ssd1680_gdem0213b74_gray4
+```
+
 #### epdsi_ssd1680_gdey0266z90
 
 Good Display GDEY0266Z90 2.66" Tri-Color (Black/White/Red, 152×296), `Ssd1680Controller`. Demonstrates every refresh mode the SSD1680 exposes for a Tri-Color panel: `Full`, a partial window loop, `FastFull`, and `BaseMap`/`Partial` at their real (non-differential on colour glass) cost. Wiring: DESPI-C02, above.
