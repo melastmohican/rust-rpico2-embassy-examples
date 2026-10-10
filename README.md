@@ -295,6 +295,14 @@ Good Display ZJY122250-0213AJH-E5 2.13" Quad-Color (Black/White/Yellow/Red, 122�
 cargo run --example epdsi_jd79661_zjy122250
 ```
 
+#### epdsi_jd79676_gdey0213f52
+
+Good Display GDEY0213F52 2.13" Quad-Color (Black/White/Yellow/Red, 122×250), `Jd79676Controller` (JD79676A). Same `FPC-J002` ribbon stamp as the GDEY0213F51 (JD79661); check the rear sticker (`0213SW-F52-B2`) to pick the right example. Full refresh takes about 11 s per the datasheet (15.9 s measured on an RP2040). Needs `epdsi` 0.7 or newer. Verified on a Pico 2 (RP2350). Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_jd79676_gdey0213f52
+```
+
 #### epdsi_jd79660_gdem0154f51h
 
 Good Display GDEM0154F51H 1.54" Quad-Color (Black/White/Yellow/Red, 200×200, Waveshare *1.54inch e-Paper (G)*), `Jd79660Controller` — shares its SPI register table with `Jd79661Controller` (both wrap `Jd7966xController`), differing only in which registers `init_sequence` writes. Wiring: DESPI-C02, above.
