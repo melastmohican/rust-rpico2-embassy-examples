@@ -303,6 +303,14 @@ Good Display GDEY0213F52 2.13" Quad-Color (Black/White/Yellow/Red, 122×250), `J
 cargo run --example epdsi_jd79676_gdey0213f52
 ```
 
+#### epdsi_ist7163_gdem037f51
+
+Good Display GDEM037F51 3.7" Quad-Color (Black/White/Yellow/Red, 240×416, Waveshare *3.7inch e-Paper (G)*), `Ist7163Controller` (IST7163). Not the JD79661 family: PWR and BTST differ in length and the init runs two test-mode register banks. Full refresh takes about 20 s. Needs the `epdsi` release that adds `Ist7163Controller` (0.7.1). Verified on a Pico 2 (RP2350). Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_ist7163_gdem037f51
+```
+
 #### epdsi_jd79660_gdem0154f51h
 
 Good Display GDEM0154F51H 1.54" Quad-Color (Black/White/Yellow/Red, 200×200, Waveshare *1.54inch e-Paper (G)*), `Jd79660Controller` — shares its SPI register table with `Jd79661Controller` (both wrap `Jd7966xController`), differing only in which registers `init_sequence` writes. Wiring: DESPI-C02, above.
