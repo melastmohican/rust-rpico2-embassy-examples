@@ -385,6 +385,14 @@ Companion to `epdsi_ssd1680_gdey0266t90` — drives the panel's 4-level grayscal
 cargo run --example epdsi_ssd1680_gdey0266t90_gray4
 ```
 
+#### epdsi_ssd1685_gdey0266t90h
+
+Async counterpart to `rust-rpico2-discovery`'s `ssd1685_gdey0266t90h_epd`. Good Display GDEY0266T90H 2.66" Monochrome (184×360), `Ssd168xController` with `Ssd168xVariant::Ssd1685`. A different glass from `GDEY0266T90` (SSD1685, not SSD1680), so the wrong variant renders badly rather than erroring. Same three phases as `epdsi_ssd1680_gdey0266t90`: full frame, a partial-window logo-swap loop, a full-waveform cleanup pass. Needs `epdsi` 0.8.0 or later, so this repo carries a temporary `[patch.crates-io]` path override until that release. Hardware-verified on the Pico 2 (RP2350, async), 11 Oct 2026.
+
+```bash
+cargo run --example epdsi_ssd1685_gdey0266t90h
+```
+
 #### epdsi_uc8253_gdey037t03
 
 Dalian Good Display GDEY037T03 3.7" Monochrome (240×416), `Uc8253Controller`. Full refresh, a partial-window logo-swap loop, and a full-waveform cleanup pass. BUSY is active-**low** on this controller. Wiring: DESPI-C02, above.
