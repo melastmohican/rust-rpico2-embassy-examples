@@ -387,7 +387,7 @@ cargo run --example epdsi_ssd1680_gdey0266t90_gray4
 
 #### epdsi_ssd1685_gdey0266t90h
 
-Async counterpart to `rust-rpico2-discovery`'s `ssd1685_gdey0266t90h_epd`. Good Display GDEY0266T90H 2.66" Monochrome (184×360), `Ssd168xController` with `Ssd168xVariant::Ssd1685`. A different glass from `GDEY0266T90` (SSD1685, not SSD1680), so the wrong variant renders badly rather than erroring. Same three phases as `epdsi_ssd1680_gdey0266t90`: full frame, a partial-window logo-swap loop, a full-waveform cleanup pass. Needs `epdsi` 0.8.0 or later, so this repo carries a temporary `[patch.crates-io]` path override until that release. Hardware-verified on the Pico 2 (RP2350, async), 11 Oct 2026.
+Async counterpart to `rust-rpico2-discovery`'s `ssd1685_gdey0266t90h_epd`. Good Display GDEY0266T90H 2.66" Monochrome (184×360), `Ssd168xController` with `Ssd168xVariant::Ssd1685`. A different glass from `GDEY0266T90` (SSD1685, not SSD1680), so the wrong variant renders badly rather than erroring. Same three phases as `epdsi_ssd1680_gdey0266t90`: full frame, a partial-window logo-swap loop, a full-waveform cleanup pass. Needs `epdsi` 0.8.0 or later, so this repo carries a temporary `[patch.crates-io]` path override until that release. Hardware-verified on the Pico 2 (RP2350, async), 11 Oct 2026, for Phases 1 to 3. A Phase 4 `FastFull` pass measured **1677 ms against 1190 ms for Full** on this build (1678 against 1191 in the blocking example), so on this panel at room temperature it is slower, not faster.
 
 ```bash
 cargo run --example epdsi_ssd1685_gdey0266t90h
