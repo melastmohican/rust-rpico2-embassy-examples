@@ -9,6 +9,14 @@
 //!
 //! Part of the Phase 5 hardware gate ahead of `epdsi` 0.2.0's breaking release.
 //!
+//! ## Panel check
+//!
+//! Before the refresh the example resets the panel and reads its `R70H` revision register over
+//! a bit-banged 3-wire bus, before SPI takes SCK and MOSI, then logs which unit it is. Seen so
+//! far: `09 01 01` (Adafruit `ZJY122250`, this example), `09 02 01` and `89 02 01` (the
+//! `0213SW-F52-B2` F52 units, which want `jd79676_gdey0213f52_epd`). It never powers on or
+//! refreshes the panel, and the example carries on whatever it reads.
+//!
 //! ## Hardware
 //!
 //! - **Board:** Raspberry Pi Pico 2 (RP2350)
@@ -51,7 +59,7 @@ use panic_probe as _;
 use embassy_executor::Spawner;
 use embassy_rp as hal;
 use embassy_rp::bind_interrupts;
-use embassy_rp::gpio::{Input, Level, Output, Pull};
+use embassy_rp::gpio::{Flex, Input, Level, Output, Pull};
 use embassy_rp::spi::{Config, Spi};
 use embassy_time::{Delay, Timer};
 
@@ -197,11 +205,82 @@ impl<'a> Dimensions for QuadColorBuffer<'a> {
     }
 }
 
+/// Adapts [`embassy_rp::gpio::Flex`] to [`epdsi::bus3::DynamicPin`] for the pre-flight revision
+/// read. `Flex` already switches direction at runtime, so this only forwards.
+struct FlexPin<'d>(Flex<'d>);
+
+impl DynamicPin for FlexPin<'_> {
+    type Error = core::convert::Infallible;
+
+    fn set_as_output(&mut self) -> Result<(), Self::Error> {
+        self.0.set_as_output();
+        Ok(())
+    }
+
+    fn set_as_input(&mut self) -> Result<(), Self::Error> {
+        self.0.set_as_input();
+        Ok(())
+    }
+
+    fn set_high(&mut self) -> Result<(), Self::Error> {
+        self.0.set_high();
+        Ok(())
+    }
+
+    fn set_low(&mut self) -> Result<(), Self::Error> {
+        self.0.set_low();
+        Ok(())
+    }
+
+    fn is_high(&mut self) -> Result<bool, Self::Error> {
+        Ok(Flex::is_high(&self.0))
+    }
+}
+
+/// Says which rear-sticker family a `R70H` reading belongs to, from the units seen so far.
+fn describe_revision(rev: [u8; 3]) -> &'static str {
+    match rev {
+        [0x09, 0x01, 0x01] => {
+            "matches the Adafruit ZJY122250 unit seen (sticker ZJY122250-0213EAH-E5)"
+        }
+        [0x03, 0x02, 0x01] => "matches the JD79661AA datasheet (not seen on a unit before)",
+        [0x09, 0x02, 0x01] | [0x89, 0x02, 0x01] => {
+            "F52 unit (0213SW-F52-B2): this example is for the F51, use jd79676_gdey0213f52_epd"
+        }
+        [0xFF, 0xFF, 0xFF] | [0x00, 0x00, 0x00] => "read path not reaching the IC, no answer",
+        _ => "new pattern, record it with the rear sticker text and lot",
+    }
+}
+
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     info!("Starting JD79661 ZJY122250 2.13\" Quad-Color EPD example (async/Embassy)");
 
-    let p = embassy_rp::init(Default::default());
+    let mut p = embassy_rp::init(Default::default());
+
+    // --- Which panel is this? Read R70H before SPI0 takes SCK and MOSI. ---
+    // Reset with the demo's timings, bit-bang the register read on reborrowed pins, then let
+    // them go. Nothing is powered on or refreshed here.
+    {
+        let mut id_delay = Delay;
+        let id_cs = Output::new(p.PIN_17.reborrow(), Level::High);
+        let id_sck = Output::new(p.PIN_18.reborrow(), Level::Low);
+        let id_sda = FlexPin(Flex::new(p.PIN_19.reborrow()));
+        let id_dc = Output::new(p.PIN_12.reborrow(), Level::Low);
+        let mut id_rst = Output::new(p.PIN_11.reborrow(), Level::High);
+        let id_busy = Input::new(p.PIN_13.reborrow(), Pull::Up);
+
+        Timer::after_millis(20).await;
+        id_rst.set_low();
+        Timer::after_millis(40).await;
+        id_rst.set_high();
+        Timer::after_millis(50).await;
+
+        let mut id_bus = Spi3Bus::new(id_cs, id_sck, id_sda, id_dc, id_rst, id_busy);
+        id_bus.wait_busy(&mut id_delay).await.unwrap();
+        let rev = id_bus.read_jd7966x_revision(&mut id_delay).await.unwrap();
+        info!("Panel R70H = {:02X}: {}", rev, describe_revision(rev));
+    }
 
     let dc = Output::new(p.PIN_12, Level::Low);
     let rst = Output::new(p.PIN_11, Level::High);

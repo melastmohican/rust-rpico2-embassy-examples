@@ -11,6 +11,21 @@
 //! GDEY0213F51 (JD79676). Check the rear sticker (`0213SW-F52-B2`) before choosing between this
 //! example and `epdsi_jd79661_zjy122250`.
 //!
+//! ## Phases
+//!
+//! 0. **Panel check**: resets the panel and reads its `R70H` revision register over a bit-banged
+//!    3-wire bus, before SPI takes SCK and MOSI, then logs which unit it is. Seen so far:
+//!    `09 02 01` (Seeed `0213SW-F52-B2`), `89 02 01` (Good Display `GDEY0213F52`) and
+//!    `09 01 01` (Adafruit `ZJY122250`, which wants `jd79661_zjy122250_epd` instead). It never
+//!    powers on or refreshes the panel, and the example carries on whatever it reads.
+//! 1. **Phase 1**: full refresh, timed.
+//! 2. **Phase 2**: the same frame with the footer relabelled, refreshed with
+//!    `Jd7966xRefreshMode::Fast` (Good Display's `EPD_init_Fast()`) and timed against Phase 1.
+//!    Needs `epdsi` 0.8.1 or later. A raw-command probe of the same sequence on a
+//!    XIAO ESP32-C3 measured 15.9 s for Full and 10.9 s for Fast on two units, with clean colours
+//!    (12 Oct 2026). This example itself, run async on a Pico 2 (RP2350) with a Good Display
+//!    unit (`R70H` = `89 02 01`), measured 15920 ms for Full and 10951 ms for Fast.
+//!
 //! ## Hardware
 //!
 //! - **Board:** Raspberry Pi Pico 2 (RP2350)
@@ -53,9 +68,9 @@ use panic_probe as _;
 use embassy_executor::Spawner;
 use embassy_rp as hal;
 use embassy_rp::bind_interrupts;
-use embassy_rp::gpio::{Input, Level, Output, Pull};
+use embassy_rp::gpio::{Flex, Input, Level, Output, Pull};
 use embassy_rp::spi::{Config, Spi};
-use embassy_time::{Delay, Timer};
+use embassy_time::{Delay, Instant, Timer};
 
 use embedded_graphics::geometry::{Dimensions, Point, Size};
 use embedded_graphics::mono_font::MonoTextStyle;
@@ -199,11 +214,83 @@ impl<'a> Dimensions for QuadColorBuffer<'a> {
     }
 }
 
+/// Adapts [`embassy_rp::gpio::Flex`] to [`epdsi::bus3::DynamicPin`] for the pre-flight revision
+/// read. `Flex` already switches direction at runtime, so this only forwards.
+struct FlexPin<'d>(Flex<'d>);
+
+impl DynamicPin for FlexPin<'_> {
+    type Error = core::convert::Infallible;
+
+    fn set_as_output(&mut self) -> Result<(), Self::Error> {
+        self.0.set_as_output();
+        Ok(())
+    }
+
+    fn set_as_input(&mut self) -> Result<(), Self::Error> {
+        self.0.set_as_input();
+        Ok(())
+    }
+
+    fn set_high(&mut self) -> Result<(), Self::Error> {
+        self.0.set_high();
+        Ok(())
+    }
+
+    fn set_low(&mut self) -> Result<(), Self::Error> {
+        self.0.set_low();
+        Ok(())
+    }
+
+    fn is_high(&mut self) -> Result<bool, Self::Error> {
+        Ok(Flex::is_high(&self.0))
+    }
+}
+
+/// Says which rear-sticker family a `R70H` reading belongs to, from the units seen so far.
+fn describe_revision(rev: [u8; 3]) -> &'static str {
+    match rev {
+        [0x09, 0x02, 0x01] => "matches the JD79676AA datasheet (Seeed 0213SW-F52-B2, lot NRA2L21)",
+        [0x89, 0x02, 0x01] => "matches the Good Display GDEY0213F52 unit seen (lot N5B3S02)",
+        [0x09, 0x01, 0x01] => {
+            "Adafruit ZJY122250 unit: this example is for the F52, use jd79661_zjy122250_epd"
+        }
+        [0x03, 0x02, 0x01] => {
+            "matches the JD79661AA datasheet: an F51-family part, use jd79661_zjy122250_epd"
+        }
+        [0xFF, 0xFF, 0xFF] | [0x00, 0x00, 0x00] => "read path not reaching the IC, no answer",
+        _ => "new pattern, record it with the rear sticker text and lot",
+    }
+}
+
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     info!("Starting JD79676 GDEY0213F52 2.13\" Quad-Color EPD example (async/Embassy)");
 
-    let p = embassy_rp::init(Default::default());
+    let mut p = embassy_rp::init(Default::default());
+
+    // --- Which panel is this? Read R70H before SPI0 takes SCK and MOSI. ---
+    // Reset with the demo's timings, bit-bang the register read on reborrowed pins, then let
+    // them go. Nothing is powered on or refreshed here.
+    {
+        let mut id_delay = Delay;
+        let id_cs = Output::new(p.PIN_17.reborrow(), Level::High);
+        let id_sck = Output::new(p.PIN_18.reborrow(), Level::Low);
+        let id_sda = FlexPin(Flex::new(p.PIN_19.reborrow()));
+        let id_dc = Output::new(p.PIN_12.reborrow(), Level::Low);
+        let mut id_rst = Output::new(p.PIN_11.reborrow(), Level::High);
+        let id_busy = Input::new(p.PIN_13.reborrow(), Pull::Up);
+
+        Timer::after_millis(20).await;
+        id_rst.set_low();
+        Timer::after_millis(40).await;
+        id_rst.set_high();
+        Timer::after_millis(50).await;
+
+        let mut id_bus = Spi3Bus::new(id_cs, id_sck, id_sda, id_dc, id_rst, id_busy);
+        id_bus.wait_busy(&mut id_delay).await.unwrap();
+        let rev = id_bus.read_jd7966x_revision(&mut id_delay).await.unwrap();
+        info!("Panel R70H = {:02X}: {}", rev, describe_revision(rev));
+    }
 
     let dc = Output::new(p.PIN_12, Level::Low);
     let rst = Output::new(p.PIN_11, Level::High);
@@ -299,9 +386,36 @@ async fn main(_spawner: Spawner) {
         .unwrap();
 
     info!("Triggering display refresh...");
+    let start = Instant::now();
     epd.refresh(&mut delay).await.unwrap();
+    let full_ms = start.elapsed().as_millis();
+    info!("Phase 1 Full: {} ms", full_ms);
 
     info!("Powering off DC/DC...");
+    epd.sleep(&mut delay).await.unwrap();
+
+    // --- Phase 2: Jd7966xRefreshMode::Fast, the vendor demo's `EPD_init_Fast()`. ---
+    // The mode is read by `init`, so it takes effect on the next init after the sleep above.
+    // The footer is relabelled so the second frame can be told apart from the first.
+    Timer::after_secs(3).await;
+    display.fill_rect(1, 198, 120, 50, QuadColor::White);
+    Text::new("Fast init", Point::new(16, 220), text_style)
+        .draw(&mut display)
+        .unwrap();
+    Text::new("epdsi BWRY", Point::new(11, 240), text_style)
+        .draw(&mut display)
+        .unwrap();
+
+    epd.controller_mut()
+        .set_refresh_mode(Jd7966xRefreshMode::Fast);
+    epd.init(&mut delay).await.unwrap();
+    epd.write_frame(ColorChannel::BlackWhite, display.as_slice())
+        .await
+        .unwrap();
+    let start = Instant::now();
+    epd.refresh(&mut delay).await.unwrap();
+    let fast_ms = start.elapsed().as_millis();
+    info!("Phase 2 Fast: {} ms (Full was {} ms)", fast_ms, full_ms);
     epd.sleep(&mut delay).await.unwrap();
 
     info!("JD79676 QuadColor epdsi demo finished successfully!");

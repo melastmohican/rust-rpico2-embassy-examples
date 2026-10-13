@@ -289,7 +289,7 @@ Fourteen use the [Good Display DESPI-C02 adapter board](https://www.good-display
 
 #### epdsi_jd79661_zjy122250
 
-Good Display ZJY122250-0213AJH-E5 2.13" Quad-Color (Black/White/Yellow/Red, 122×250), `Jd79661Controller`. Wiring: DESPI-C02, above.
+Good Display ZJY122250-0213AJH-E5 2.13" Quad-Color (Black/White/Yellow/Red, 122×250), `Jd79661Controller`. Before the refresh it reads the panel's `R70H` revision register and logs which unit it is (`09 01 01` on the Adafruit `ZJY122250` unit; an F52 unit reads `09 02 01` or `89 02 01` and the log says to use `jd79676_gdey0213f52_epd`). It needs `epdsi` 0.8.1 or later for the read. Verified async on a Pico 2 (RP2350) with an Adafruit unit on 12 Oct 2026: `R70H` read `09 01 01`. Wiring: DESPI-C02, above.
 
 ```bash
 cargo run --example epdsi_jd79661_zjy122250
@@ -297,7 +297,7 @@ cargo run --example epdsi_jd79661_zjy122250
 
 #### epdsi_jd79676_gdey0213f52
 
-Good Display GDEY0213F52 2.13" Quad-Color (Black/White/Yellow/Red, 122×250), `Jd79676Controller` (JD79676A). Same `FPC-J002` ribbon stamp as the GDEY0213F51 (JD79661); check the rear sticker (`0213SW-F52-B2`) to pick the right example. Full refresh takes about 11 s per the datasheet (15.9 s measured on an RP2040). Needs `epdsi` 0.7 or newer. Verified on a Pico 2 (RP2350). Wiring: DESPI-C02, above.
+Good Display GDEY0213F52 2.13" Quad-Color (Black/White/Yellow/Red, 122×250), `Jd79676Controller` (JD79676A). Same `FPC-J002` ribbon stamp as the GDEY0213F51 (JD79661); check the rear sticker (`0213SW-F52-B2`) to pick the right example. Full refresh takes about 11 s per the datasheet (15.9 s measured on an RP2040). Needs `epdsi` 0.7 or newer. Verified on a Pico 2 (RP2350). Before the refresh it reads the panel's `R70H` revision register and logs which unit it is. A second phase refreshes again with `Jd7966xRefreshMode::Fast` and logs both times; that phase needs `epdsi` 0.8.1 or later. Verified async on a Pico 2 (RP2350) with a Good Display unit on 12 Oct 2026: `R70H` read `89 02 01`, Full 15920 ms, Fast 10951 ms. Wiring: DESPI-C02, above.
 
 ```bash
 cargo run --example epdsi_jd79676_gdey0213f52
