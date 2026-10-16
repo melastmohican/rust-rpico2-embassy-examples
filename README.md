@@ -393,6 +393,14 @@ Async counterpart to `rust-rpico2-discovery`'s `ssd1685_gdey0266t90h_epd`. Good 
 cargo run --example epdsi_ssd1685_gdey0266t90h
 ```
 
+#### epdsi_uc8151d_gdew0215t12
+
+Good Display GDEW0215T12 2.15" Monochrome (112×208), `Uc8151dController`, async. Four screens held 1.5 s each: a full refresh on the OTP waveform, a whole-frame partial, and two windowed partial updates of a counter band, then deep sleep. BUSY is active-**low**, and the SPI clock is 4 MHz because this chip's serial write cycle is at least 100 ns. Needs `epdsi` 0.9.1 or later. The blocking twin is bench verified on an XIAO ESP32-C3 with the Seeed ePaper Driver Board; this async example completed a run on the Pico 2 with no errors.
+
+```bash
+cargo run --example epdsi_uc8151d_gdew0215t12
+```
+
 #### epdsi_uc8253_gdey037t03
 
 Dalian Good Display GDEY037T03 3.7" Monochrome (240×416), `Uc8253Controller`. Full refresh, a partial-window logo-swap loop, and a full-waveform cleanup pass. BUSY is active-**low** on this controller. Wiring: DESPI-C02, above.
