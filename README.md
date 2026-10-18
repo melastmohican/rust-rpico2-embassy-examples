@@ -321,6 +321,14 @@ Good Display GDEM0154F51H 1.54" Quad-Color (Black/White/Yellow/Red, 200×200, Wa
 cargo run --example epdsi_jd79660_gdem0154f51h
 ```
 
+#### epdsi_ssd2681_gdem0154f61h
+
+Good Display GDEM0154F61H 1.54" Quad-Color (Black/White/Yellow/Red, 200×200, rear marking `0154SW-F61H-B2`), `Ssd2681Controller`, async. Not the same panel as `GDEM0154F51H`: different IC and a different init, so it needs its own controller. Two phases: a full refresh with `Ssd2681RefreshMode::Full`, then the same frame refreshed with `Ssd2681RefreshMode::Fast`, with both timed in the log. Wiring: DESPI-C02, as above. Needs `epdsi` 0.9.2 or later. The blocking twin is bench verified on an XIAO ESP32-C3 (Full 20588 ms, Fast 12338 ms, clean colours); this async example, run on a Pico 2 on 17 Oct 2026, measured Full 20597 ms and Fast 12343 ms.
+
+```bash
+cargo run --example epdsi_ssd2681_gdem0154f61h
+```
+
 #### epdsi_ssd1681_gdem0154z90
 
 Dalian Good Display GDEM0154Z90 1.54" Tri-Color (200×200), `Ssd1681Controller`. Full Tri-Color content plus a partial *window* refresh loop — no fast/differential waveform on this panel, every update takes ~14 s. Wiring: DESPI-C02, above.
