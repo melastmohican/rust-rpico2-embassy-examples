@@ -441,6 +441,14 @@ Companion to `epdsi_ssd1677_gdeq0426t82` — drives the panel's 4-level grayscal
 cargo run --example epdsi_ssd1677_gdeq0426t82_gray4
 ```
 
+#### epdsi_ssd1677_gdeq0426t82_macpaint
+
+Async counterpart to `ssd1677_gdeq0426t82_macpaint` in `rust-rpico2-discovery` — upiir's "hello" handwriting animation on a 640×480 MacPaint canvas, one fast full refresh followed by 361 windowed `0xFC` partial updates. Same driver call sequence, every `epdsi` call `.await`ed. Runs in the panel's native 800×480 landscape orientation (no rotation). **Not yet run on hardware.** Wiring: DESPI-C02, above.
+
+```bash
+cargo run --release --example epdsi_ssd1677_gdeq0426t82_macpaint
+```
+
 #### epdsi_pdi_e2266ks0c1
 
 Pervasive Displays E2266KS0C1 2.66" Monochrome, `PervasiveBwController` (Driver C). Both Normal Full Refresh and Fast Differential Refresh. Wiring: EXT3-1/EPDK, above (J3 open).
