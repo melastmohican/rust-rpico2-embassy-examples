@@ -409,6 +409,14 @@ Good Display GDEW0215T12 2.15" Monochrome (112×208), `Uc8151dController`, async
 cargo run --example epdsi_uc8151d_gdew0215t12
 ```
 
+#### epdsi_uc8175_gdew0102i4fc
+
+Good Display GDEW0102I4FC 1.02" Monochrome (80×128), `Uc8175Controller`, async, on the `DESPI-C102` adapter (30-pin FPC). Clears to white, then draws a header with the Rust and Ferris logos, using two full refreshes (this panel has no partial refresh), then deep sleep. BUSY is active-**low** and the SPI clock is 4 MHz. Needs `epdsi` 0.9.5 or later. Bench verified on the Pico 2 on 2 Nov 2026; the blocking twin also ran on an XIAO ESP32-C3 and a Pico 2. If the panel shows only noise, reseat the 30-pin FPC.
+
+```bash
+cargo run --example epdsi_uc8175_gdew0102i4fc
+```
+
 #### epdsi_uc8253_gdey037t03
 
 Dalian Good Display GDEY037T03 3.7" Monochrome (240×416), `Uc8253Controller`. Full refresh, a partial-window logo-swap loop, and a full-waveform cleanup pass. BUSY is active-**low** on this controller. Wiring: DESPI-C02, above.
