@@ -11,7 +11,7 @@
 //! renders wrongly. This is not the `GDEY042T81-FL02` front-light variant.
 //!
 //! **Hardware-verified on the Pico 2 (RP2350, async)** (4 Nov 2026): Full 1584 ms, Partial 410 ms, FastFull 1665 ms,
-//! so `FastFull` is slower than `Full` on this panel at room temperature. Needs an `epdsi` release newer than 0.10.0 for the variant.
+//! so `FastFull` is slower than `Full` on this panel at room temperature. Needs `epdsi` 0.10.1 or later for the variant.
 //! Register sequences follow Good Display's `AU-GDEY042T81-FP4G-20240801` demo and the SSD1683
 //! datasheet; see the `GDEY042T81` panel doc in `epdsi` for the deliberate departures (data entry
 //! `0x03`, `0x18 80` at init, no hard reset before a partial).

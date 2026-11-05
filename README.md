@@ -451,7 +451,7 @@ cargo run --example epdsi_ssd1677_gdeq0426t82
 
 #### epdsi_ssd1683_gdey042t81
 
-Async counterpart to `rust-rpico2-discovery`'s `ssd1683_gdey042t81_epd`. Good Display GDEY042T81 4.2" Monochrome (400×300), `Ssd168xController` with `Ssd168xVariant::Ssd1683`. Not the `GDEY042T81-FL02` front-light variant. Four phases: full frame, a partial-window logo-swap loop, a full-waveform cleanup pass, then a timed `FastFull` redraw. Needs an `epdsi` release newer than 0.10.0, so this repo carries a temporary `[patch.crates-io]` path override until that release. Hardware-verified on the Pico 2 (RP2350, async), 4 Nov 2026: **Full 1584 ms, Partial 410 ms, FastFull 1665 ms**, within 2 ms of the blocking example.
+Async counterpart to `rust-rpico2-discovery`'s `ssd1683_gdey042t81_epd`. Good Display GDEY042T81 4.2" Monochrome (400×300), `Ssd168xController` with `Ssd168xVariant::Ssd1683`. Not the `GDEY042T81-FL02` front-light variant. Four phases: full frame, a partial-window logo-swap loop, a full-waveform cleanup pass, then a timed `FastFull` redraw. Needs `epdsi` 0.10.1 or later. Hardware-verified on the Pico 2 (RP2350, async), 4 Nov 2026: **Full 1584 ms, Partial 410 ms, FastFull 1665 ms**, within 2 ms of the blocking example.
 
 ```bash
 cargo run --example epdsi_ssd1683_gdey042t81
