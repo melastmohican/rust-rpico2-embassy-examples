@@ -449,6 +449,28 @@ Dalian Good Display GDEQ0426T82 4.26" Monochrome (800×480), `Ssd1677Controller`
 cargo run --example epdsi_ssd1677_gdeq0426t82
 ```
 
+#### epdsi_ssd1683_gdey042t81
+
+Async counterpart to `rust-rpico2-discovery`'s `ssd1683_gdey042t81_epd`. Good Display GDEY042T81 4.2" Monochrome (400×300), `Ssd168xController` with `Ssd168xVariant::Ssd1683`. Not the `GDEY042T81-FL02` front-light variant. Four phases: full frame, a partial-window logo-swap loop, a full-waveform cleanup pass, then a timed `FastFull` redraw. Needs an `epdsi` release newer than 0.10.0, so this repo carries a temporary `[patch.crates-io]` path override until that release. Hardware-verified on the Pico 2 (RP2350, async), 4 Nov 2026: **Full 1584 ms, Partial 410 ms, FastFull 1665 ms**, within 2 ms of the blocking example.
+
+```bash
+cargo run --example epdsi_ssd1683_gdey042t81
+```
+
+Wiring as for `epdsi_ssd1685_gdey0266t90h`.
+
+
+#### epdsi_ssd1683_gdey042t81_gray4
+
+Async counterpart to `rust-rpico2-discovery`'s `ssd1683_gdey042t81_gray4_epd`. 4-level grayscale through `Ssd168xRefreshMode::Gray4Otp` (the SSD1683's built-in waveform, no LUT), from Good Display's own `EPD_HW_Init_4G` demo. Two screens: banner and swatch, then concentric rings. Hardware-verified on the Pico 2 (RP2350, async), 4 Nov 2026: both screens render correctly.
+
+```bash
+cargo run --example epdsi_ssd1683_gdey042t81_gray4
+```
+
+Wiring as for `epdsi_ssd1683_gdey042t81`.
+
+
 #### epdsi_ssd1677_gdeq0426t82_gray4
 
 Companion to `epdsi_ssd1677_gdeq0426t82` — drives the panel's 4-level grayscale mode. `GDEQ0426T82::GRAY4` is Adafruit_EPD-sourced, not Seeed/Good Display material, and — unlike `GDEY0266T90`'s single-pass Gray4 mode above — needs a **two-pass** refresh (`Ssd1677RefreshMode::Gray4Preclear` then `Gray4`, with an LUT/voltage-register reload between). Confirmed rendering four distinct gray levels correctly on this board. Wiring: DESPI-C02, above.
