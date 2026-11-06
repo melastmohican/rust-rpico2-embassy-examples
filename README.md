@@ -295,6 +295,14 @@ Good Display ZJY122250-0213AJH-E5 2.13" Quad-Color (Black/White/Yellow/Red, 122�
 cargo run --example epdsi_jd79661_zjy122250
 ```
 
+#### epdsi_jd79661_gdey029f52
+
+Good Display GDEY029F52 2.9" Quad-Color (Black/White/Yellow/Red, 128×296), `Jd79661Controller`. Draws two pages with a 20 s rest between them: a geometry check (border, red corner square, black, yellow and red bands), then the usual demo page. Each full refresh takes about 16 s, so don't loop it. Before the refresh it reads the panel's `R70H` revision register and logs which unit it is (`83 02 01` on the `029SW-F52-B2` unit). Check the rear sticker: a `GDEY029F51H` (JD79667, 168×384) is a different product and won't draw correctly here. Needs the `GDEY029F52` panel type, which is newer than `epdsi` 0.10.1. Verified async on a Pico 2 (RP2350) on 5 Nov 2026: `R70H` read `83 02 01` and both pages drew cleanly. Wiring: DESPI-C02, above.
+
+```bash
+cargo run --example epdsi_jd79661_gdey029f52
+```
+
 #### epdsi_jd79676_gdey0213f52
 
 Good Display GDEY0213F52 2.13" Quad-Color (Black/White/Yellow/Red, 122×250), `Jd79676Controller` (JD79676A). Same `FPC-J002` ribbon stamp as the GDEY0213F51 (JD79661); check the rear sticker (`0213SW-F52-B2`) to pick the right example. Full refresh takes about 11 s per the datasheet (15.9 s measured on an RP2040). Needs `epdsi` 0.7 or newer. Verified on a Pico 2 (RP2350). Before the refresh it reads the panel's `R70H` revision register and logs which unit it is. A second phase refreshes again with `Jd7966xRefreshMode::Fast` and logs both times; that phase needs `epdsi` 0.8.1 or later. Verified async on a Pico 2 (RP2350) with a Good Display unit on 12 Oct 2026: `R70H` read `89 02 01`, Full 15920 ms, Fast 10951 ms. Wiring: DESPI-C02, above.
